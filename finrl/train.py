@@ -118,6 +118,18 @@ def train_crypto_trading(config_suffix):
         from finrl.apps.crypto_etc import crypto_config5 as crypto_config
     elif config_suffix == '6':
         from finrl.apps.crypto_etc import crypto_config6 as crypto_config
+    elif config_suffix == '7':
+        from finrl.apps.crypto_etc import crypto_config7 as crypto_config
+    elif config_suffix == '8':
+        from finrl.apps.crypto_etc import crypto_config8 as crypto_config
+    elif config_suffix == '9':
+        from finrl.apps.crypto_etc import crypto_config9 as crypto_config
+    elif config_suffix == '10':
+        from finrl.apps.crypto_etc import crypto_config10 as crypto_config
+    elif config_suffix == '11':
+        from finrl.apps.crypto_etc import crypto_config11 as crypto_config
+    elif config_suffix == '12':
+        from finrl.apps.crypto_etc import crypto_config12 as crypto_config
     else:
         raise 'config_suffix is not in define'
     """
