@@ -26,7 +26,7 @@ TRAINED_MODEL_DIR = f"trained_models"
 DATA_SAVE_DIR = f"datasets"
 TRAINED_MODEL_DIR = f"trained_models"
 TENSORBOARD_LOG_DIR = f"tensorboard_log"
-RESULTS_DIR = f"results_1"
+RESULTS_DIR = f"results_7"
 TOTAL_TIMESTAMPS = 80000
 # os.makedirs(TRAINED_MODEL_DIR)
 
