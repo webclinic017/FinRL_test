@@ -46,10 +46,12 @@ def crypto_backtest_plot(
     baseline_end=config.END_DATE,
     baseline_tickers=["BTC/USDT", "ETH/USDT", "LTC/USDT", "XLM/USDT"],
     value_col_name="account_value",
-    pngname='model_returns'
+    pngname='model_returns',
+    config_suffix=''
 ):
 
     df = deepcopy(account_value)
+    df = df[(baseline_start <= df.date) & (df.date <= baseline_end)]
     test_returns = get_daily_return(df, value_col_name=value_col_name)
     test_returns = (test_returns+1).cumprod()
 
@@ -69,15 +71,13 @@ def crypto_backtest_plot(
         plt.figure(figsize=(12, 5))
         plt.xlabel('Number of requests every 10 minutes')
 
-        ax1 = merge_baseline_test.benchmark.plot(color='blue', grid=True, label='benchmark')
-        ax2 = merge_baseline_test.backtest.plot(color='red', grid=True, label='backtest')
+        merge_baseline_test.benchmark.plot(color='blue', grid=True, label='benchmark')
+        merge_baseline_test.backtest.plot(color='red', grid=True, label='backtest')
 
-        h1, l1 = ax1.get_legend_handles_labels()
-        h2, l2 = ax2.get_legend_handles_labels()
-
-        plt.legend(h1+h2, l1+l2, loc=2)
+        plt.legend(loc=2)
+        plt.ylim(-0.5, 2.5)
         plt.show()
-        plt.savefig(f"./results/{crypto_config.RESULTS_DIR}/{pngname} + {baseline_ticker}.png")
+        plt.savefig(f"./results/results_{config_suffix}/{pngname}__{baseline_ticker.replace('/', '')}.png")
 
 
 def backtest_plot(

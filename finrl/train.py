@@ -184,7 +184,7 @@ def train_crypto_trading(config_suffix):
 
     print("==============Model Training===========")
 
-    for model_type in ['a2c', 'ddpg', 'ppo', 'td3']:
+    for model_type in ['a2c', 'ddpg', 'ppo', 'td3', 'sac']:
         print(f"=============={model_type}===========")
         model = agent.get_model(model_type)
         trained = agent.train_model(
@@ -207,10 +207,11 @@ def train_crypto_trading(config_suffix):
         df_actions.to_csv("./results/" + crypto_config.RESULTS_DIR + "/df_actions_" + model_type + ".csv")
 
         crypto_backtest_plot(
-            df_account_value,
-            baseline_ticker=["BTC/USDT", "ETH/USDT", "LTC/USDT", "XLM/USDT"],
+            account_value=df_account_value,
+            baseline_tickers=["BTC/USDT", "ETH/USDT", "LTC/USDT", "XLM/USDT"],
             baseline_start=crypto_config.START_TRADE_DATE,
             baseline_end=crypto_config.END_DATE,
-            pngname=f'{model_type}_returns'
+            pngname=f'{model_type}_returns',
+            config_suffix=config_suffix
         )
         trained.save(f'./results/{crypto_config.RESULTS_DIR}/model_{model_type}')
