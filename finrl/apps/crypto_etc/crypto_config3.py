@@ -27,13 +27,13 @@ DATA_SAVE_DIR = f"datasets"
 TRAINED_MODEL_DIR = f"trained_models"
 TENSORBOARD_LOG_DIR = f"tensorboard_log"
 RESULTS_DIR = f"results_3"
-TOTAL_TIMESTAMPS = 160000
+TOTAL_TIMESTAMPS = 40000
 # os.makedirs(TRAINED_MODEL_DIR)
 
 
 ## time_fmt = '%Y-%m-%d'
-START_DATE = "2020-09-01"
-END_DATE = "2021-08-01"
+START_DATE = "2020-10-01"
+END_DATE = "2021-04-01"
 
 START_TRADE_DATE = "2021-02-01"
 
