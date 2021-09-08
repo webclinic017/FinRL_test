@@ -179,7 +179,7 @@ def train_crypto_trading(config_suffix):
 
     env_kwargs = {
         "hmax": 100*500,
-        "initial_amount": 2000,
+        "initial_amount": 1000000,
         "buy_cost_pct": 0.001,
         "sell_cost_pct": 0.001,
         "state_space": state_space,
