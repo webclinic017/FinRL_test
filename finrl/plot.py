@@ -42,9 +42,9 @@ def backtest_stats(account_value, value_col_name="account_value"):
 
 def crypto_backtest_plot(
     account_value,
-    baseline_start=config.START_TRADE_DATE,
-    baseline_end=config.END_DATE,
-    baseline_tickers=["BTC/USDT", "ETH/USDT", "LTC/USDT", "XLM/USDT"],
+    baseline_start,
+    baseline_end,
+    baseline_tickers,
     value_col_name="account_value",
     pngname='model_returns',
     config_suffix=''
