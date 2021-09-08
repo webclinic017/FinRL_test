@@ -33,9 +33,9 @@ TOTAL_TIMESTAMPS = 80000
 
 ## time_fmt = '%Y-%m-%d'
 START_DATE = "2020-10-01"
-END_DATE = "2021-04-01"
+END_DATE = "2021-06-01"
 
-START_TRADE_DATE = "2021-02-01"
+START_TRADE_DATE = "2021-04-01"
 
 ## dataset default columns
 DEFAULT_DATA_COLUMNS = ["date", "tic", "close"]
