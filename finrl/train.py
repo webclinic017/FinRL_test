@@ -137,8 +137,8 @@ def train_crypto_trading(config_suffix):
     """
     print("==============Start Fetching Data===========")
     df = BinanceDownloader(
-        start_date=crypto_config.START_DATE,
-        end_date=crypto_config.END_DATE,
+        start_date=crypto_config.ENUMERATE_START_DATE,
+        end_date=crypto_config.ENUMERATE_END_DATE,
         ticker_list=crypto_config.DOW_30_TICKER,
     ).fetch_data()
     crypto_config.DOW_30_TICKER = list(df.tic.value_counts().nlargest(1, keep='all').index)
@@ -166,69 +166,103 @@ def train_crypto_trading(config_suffix):
 
     processed_full = processed_full.fillna(0)
 
-    # Training & Trading data split
-    train = data_split(processed_full, crypto_config.START_DATE, crypto_config.START_TRADE_DATE)
-    trade = data_split(processed_full, crypto_config.START_TRADE_DATE, crypto_config.END_DATE)
 
-    stock_dimension = len(train.tic.unique())
-    state_space = (
-        1
-        + 2 * stock_dimension
-        + len(crypto_config.TECHNICAL_INDICATORS_LIST) * stock_dimension
-    )
+    ENUMERATE_START_DATE = "2020-10-01"
+    ENUMERATE_END_DATE = "2021-09-01"
+    ENUMERATE_START_TRADE_DATE = "2021-02-01"
+    ENUMERATE_FUTURE_MONTH = 1
+    ENUMERATE_ROLLING_MONTH = 1
 
-    env_kwargs = {
-        "hmax": 100*500,
-        "initial_amount": 1000000,
-        "buy_cost_pct": 0.001,
-        "sell_cost_pct": 0.001,
-        "state_space": state_space,
-        "stock_dim": stock_dimension,
-        "tech_indicator_list": crypto_config.TECHNICAL_INDICATORS_LIST,
-        "action_space": stock_dimension,
-        "reward_scaling": 1e-4
-    }
+    import pandas as pd
+    from datetime import datetime
 
-    e_train_gym = StockTradingEnv(df=train, **env_kwargs)
-    env_train, _ = e_train_gym.get_sb_env()
+    enumerate_date_paras = []
+    for idx, END_DATE in enumerate(pd.date_range(start=ENUMERATE_START_TRADE_DATE, end=ENUMERATE_END_DATE, freq='M') + pd.DateOffset(days=1)):
+        enumerate_date_paras.append([
+        (datetime.strptime(ENUMERATE_START_DATE, '%Y-%m-%d') + pd.DateOffset(months=idx)).strftime('%Y-%m-%d'),
+        (datetime.strptime(ENUMERATE_START_TRADE_DATE, '%Y-%m-%d') + pd.DateOffset(months=idx)).strftime('%Y-%m-%d'),
+        END_DATE.strftime('%Y-%m-%d')])
 
-    agent = DRLAgent(env=env_train)
+    # init
+    model = None
+    for enumerate_date_para in enumerate_date_paras:
+        START_DATE, START_TRADE_DATE, END_DATE = enumerate_date_para
+        # Training & Trading data split
+        train = data_split(processed_full, START_DATE, START_TRADE_DATE)
+        trade = data_split(processed_full, START_TRADE_DATE, END_DATE)
 
-    print("==============Model Training===========")
-
-    for model_type in ['a2c', 'ddpg', 'ppo', 'td3', 'sac']:
-        print(f"=============={model_type}===========")
-        model = agent.get_model(model_type)
-        trained = agent.train_model(
-            model=model, tb_log_name=model_type, total_timesteps=crypto_config.TOTAL_TIMESTAMPS
+        stock_dimension = len(train.tic.unique())
+        state_space = (
+            1
+            + 2 * stock_dimension
+            + len(crypto_config.TECHNICAL_INDICATORS_LIST) * stock_dimension
         )
 
-        print("==============Start Trading===========")
-        turbulence_threshold = int(np.quantile(train.turbulence, 0.99))
-        e_trade_gym = StockTradingEnv(df=trade, turbulence_threshold=turbulence_threshold, **env_kwargs)
+        env_kwargs = {
+            "hmax": 100*500,
+            "initial_amount": 1000000,
+            "buy_cost_pct": 0.001,
+            "sell_cost_pct": 0.001,
+            "state_space": state_space,
+            "stock_dim": stock_dimension,
+            "tech_indicator_list": crypto_config.TECHNICAL_INDICATORS_LIST,
+            "action_space": stock_dimension,
+            "reward_scaling": 1e-4
+        }
 
-        df_account_value, df_actions = DRLAgent.DRL_prediction(
-            model=trained, environment=e_trade_gym
-        )
+        e_train_gym = StockTradingEnv(df=train, **env_kwargs)
+        env_train, _ = e_train_gym.get_sb_env()
 
-        # save result
-        os.makedirs(f'./results/{crypto_config.RESULTS_DIR}', exist_ok=True)
+        agent = DRLAgent(env=env_train)
 
-        df_account_value.to_csv(
-            "./results/" + crypto_config.RESULTS_DIR + "/df_account_value_" + model_type + ".csv"
-        )
-        df_actions.to_csv("./results/" + crypto_config.RESULTS_DIR + "/df_actions_" + model_type + ".csv")
-        print("./results/" + crypto_config.RESULTS_DIR + "/df_actions_" + model_type + ".csv")
+        print("==============Model Training===========")
 
-        crypto_backtest_plot(
-            account_value=df_account_value,
-            baseline_tickers=["BTC/USDT", "ETH/USDT", "LTC/USDT", "XLM/USDT", "BNB/USDT"],
-            baseline_start=crypto_config.START_TRADE_DATE,
-            baseline_end=crypto_config.END_DATE,
-            pngname=f'{model_type}_returns',
-            config_suffix=config_suffix
-        )
-        trained.save(f'./results/{crypto_config.RESULTS_DIR}/model_{model_type}')
+        for model_type in ['a2c', 'ddpg', 'td3', 'sac']:
+            print(f"=============={model_type}===========")
+            if model is None:
+                model = agent.get_model(model_type)
+            else:
+                from stable_baselines3 import A2C, TD3, SAC, DDPG
+                if model_type == 'a2c':
+                    model = A2C.load(f'./results/{crypto_config.RESULTS_DIR}/model_a2c_{LAST_TRADE_DATE}')
+                if model_type == 'td3':
+                    model = TD3.load(f'./results/{crypto_config.RESULTS_DIR}/model_td3_{LAST_TRADE_DATE}')
+                if model_type == 'sac':
+                    model = SAC.load(f'./results/{crypto_config.RESULTS_DIR}/model_sac_{LAST_TRADE_DATE}')
+                if model_type == 'ddpg':
+                    model = DDPG.load(f'./results/{crypto_config.RESULTS_DIR}/model_ddpg_{LAST_TRADE_DATE}')
+
+            trained = agent.train_model(
+                model=model, tb_log_name=model_type, total_timesteps=crypto_config.TOTAL_TIMESTAMPS
+            )
+
+            print("==============Start Trading===========")
+            turbulence_threshold = int(np.quantile(train.turbulence, 0.99))
+            e_trade_gym = StockTradingEnv(df=trade, turbulence_threshold=turbulence_threshold, **env_kwargs)
+
+            df_account_value, df_actions = DRLAgent.DRL_prediction(
+                model=trained, environment=e_trade_gym
+            )
+
+            # save result
+            os.makedirs(f'./results/{crypto_config.RESULTS_DIR}', exist_ok=True)
+
+            df_account_value.to_csv(
+                f"./results/{crypto_config.RESULTS_DIR}/df_account_value_{model_type}_{START_TRADE_DATE}.csv"
+            )
+            df_actions.to_csv(f'./results/{crypto_config.RESULTS_DIR}/df_actions_{model_type}_{START_TRADE_DATE}.csv')
+            print("./results/" + crypto_config.RESULTS_DIR + "/df_actions_" + model_type + ".csv")
+
+            crypto_backtest_plot(
+                account_value=df_account_value,
+                baseline_tickers=["BTC/USDT", "ETH/USDT", "LTC/USDT", "XLM/USDT", "BNB/USDT"],
+                baseline_start=START_DATE,
+                baseline_end=END_DATE,
+                pngname=f'{model_type}_returns_{START_TRADE_DATE}',
+                config_suffix=config_suffix
+            )
+            trained.save(f'./results/{crypto_config.RESULTS_DIR}/model_{model_type}_{START_TRADE_DATE}')
+        LAST_TRADE_DATE = START_TRADE_DATE.copy()
 
 
 
