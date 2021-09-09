@@ -263,7 +263,7 @@ def train_crypto_trading(config_suffix):
                     config_suffix=config_suffix
                 )
                 trained.save(f'./results/{crypto_config.RESULTS_DIR}/model_{model_type}_{START_TRADE_DATE}')
-            LAST_TRADE_DATE = START_TRADE_DATE
+        LAST_TRADE_DATE = START_TRADE_DATE
 
 
 
