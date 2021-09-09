@@ -220,18 +220,18 @@ def train_crypto_trading(config_suffix):
                 pass
             else:
                 print(f"=============={model_type}===========")
-                if LAST_TRADE_DATE == '':
-                    model = agent.get_model(model_type)
-                else:
-                    from stable_baselines3 import A2C, TD3, SAC, DDPG
-                    if model_type == 'a2c':
-                        model = A2C.load(f'./results/{crypto_config.RESULTS_DIR}/model_a2c_{LAST_TRADE_DATE}')
-                    if model_type == 'td3':
-                        model = TD3.load(f'./results/{crypto_config.RESULTS_DIR}/model_td3_{LAST_TRADE_DATE}')
-                    if model_type == 'sac':
-                        model = SAC.load(f'./results/{crypto_config.RESULTS_DIR}/model_sac_{LAST_TRADE_DATE}')
-                    if model_type == 'ddpg':
-                        model = DDPG.load(f'./results/{crypto_config.RESULTS_DIR}/model_ddpg_{LAST_TRADE_DATE}')
+                # if LAST_TRADE_DATE == '':
+                model = agent.get_model(model_type)
+                # else:
+                #     from stable_baselines3 import A2C, TD3, SAC, DDPG
+                #     if model_type == 'a2c':
+                #         model = A2C.load(f'./results/{crypto_config.RESULTS_DIR}/model_a2c_{LAST_TRADE_DATE}')
+                #     elif model_type == 'td3':
+                #         model = TD3.load(f'./results/{crypto_config.RESULTS_DIR}/model_td3_{LAST_TRADE_DATE}')
+                #     elif model_type == 'sac':
+                #         model = SAC.load(f'./results/{crypto_config.RESULTS_DIR}/model_sac_{LAST_TRADE_DATE}')
+                #     elif model_type == 'ddpg':
+                #         model = DDPG.load(f'./results/{crypto_config.RESULTS_DIR}/model_ddpg_{LAST_TRADE_DATE}')
 
                 trained = agent.train_model(
                     model=model, tb_log_name=model_type, total_timesteps=crypto_config.TOTAL_TIMESTAMPS
@@ -263,7 +263,7 @@ def train_crypto_trading(config_suffix):
                     config_suffix=config_suffix
                 )
                 trained.save(f'./results/{crypto_config.RESULTS_DIR}/model_{model_type}_{START_TRADE_DATE}')
-        LAST_TRADE_DATE = START_TRADE_DATE
+        # LAST_TRADE_DATE = START_TRADE_DATE
 
 
 
