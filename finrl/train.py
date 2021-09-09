@@ -1,4 +1,3 @@
-from datetime import datetime
 import os
 from finrl.plot import crypto_backtest_plot
 import pickle
@@ -176,13 +175,14 @@ def train_crypto_trading(config_suffix):
             freq='M') + pd.DateOffset(days=1)
         ):
         enumerate_date_paras.append([
-        (datetime.strptime(crypto_config.ENUMERATE_START_DATE, '%Y-%m-%d') + pd.DateOffset(months=idx)).strftime('%Y-%m-%d'),
-        (datetime.strptime(crypto_config.ENUMERATE_START_TRADE_DATE, '%Y-%m-%d') + pd.DateOffset(months=idx)).strftime('%Y-%m-%d'),
+        (datetime.datetime.strptime(crypto_config.ENUMERATE_START_DATE, '%Y-%m-%d') + pd.DateOffset(months=idx)).strftime('%Y-%m-%d'),
+        (datetime.datetime.strptime(crypto_config.ENUMERATE_START_TRADE_DATE, '%Y-%m-%d') + pd.DateOffset(months=idx)).strftime('%Y-%m-%d'),
         END_DATE.strftime('%Y-%m-%d')])
 
     # init
     model = None
     for enumerate_date_para in enumerate_date_paras:
+        print(enumerate_date_para)
         START_DATE, START_TRADE_DATE, END_DATE = enumerate_date_para
         # Training & Trading data split
         train = data_split(processed_full, START_DATE, START_TRADE_DATE)
