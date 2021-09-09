@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 from finrl.plot import crypto_backtest_plot
 import pickle
@@ -167,20 +168,16 @@ def train_crypto_trading(config_suffix):
     processed_full = processed_full.fillna(0)
 
 
-    ENUMERATE_START_DATE = "2020-10-01"
-    ENUMERATE_END_DATE = "2021-09-01"
-    ENUMERATE_START_TRADE_DATE = "2021-02-01"
-    ENUMERATE_FUTURE_MONTH = 1
-    ENUMERATE_ROLLING_MONTH = 1
-
-    import pandas as pd
-    from datetime import datetime
-
     enumerate_date_paras = []
-    for idx, END_DATE in enumerate(pd.date_range(start=ENUMERATE_START_TRADE_DATE, end=ENUMERATE_END_DATE, freq='M') + pd.DateOffset(days=1)):
+    for idx, END_DATE in enumerate(
+        pd.date_range(
+            start=crypto_config.ENUMERATE_START_TRADE_DATE,
+            end=crypto_config.ENUMERATE_END_DATE,
+            freq='M') + pd.DateOffset(days=1)
+        ):
         enumerate_date_paras.append([
-        (datetime.strptime(ENUMERATE_START_DATE, '%Y-%m-%d') + pd.DateOffset(months=idx)).strftime('%Y-%m-%d'),
-        (datetime.strptime(ENUMERATE_START_TRADE_DATE, '%Y-%m-%d') + pd.DateOffset(months=idx)).strftime('%Y-%m-%d'),
+        (datetime.strptime(crypto_config.ENUMERATE_START_DATE, '%Y-%m-%d') + pd.DateOffset(months=idx)).strftime('%Y-%m-%d'),
+        (datetime.strptime(crypto_config.ENUMERATE_START_TRADE_DATE, '%Y-%m-%d') + pd.DateOffset(months=idx)).strftime('%Y-%m-%d'),
         END_DATE.strftime('%Y-%m-%d')])
 
     # init
