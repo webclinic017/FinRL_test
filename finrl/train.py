@@ -254,7 +254,7 @@ def train_crypto_trading(config_suffix):
             crypto_backtest_plot(
                 account_value=df_account_value,
                 baseline_tickers=["BTC/USDT", "ETH/USDT", "LTC/USDT", "XLM/USDT", "BNB/USDT"],
-                baseline_start=START_DATE,
+                baseline_start=START_TRADE_DATE,
                 baseline_end=END_DATE,
                 pngname=f'{model_type}_returns_{START_TRADE_DATE}',
                 config_suffix=config_suffix
