@@ -181,6 +181,7 @@ def train_crypto_trading(config_suffix):
 
     # init
     model = None
+    LAST_TRADE_DATE = ''
     for enumerate_date_para in enumerate_date_paras:
         print(enumerate_date_para)
         START_DATE, START_TRADE_DATE, END_DATE = enumerate_date_para
@@ -216,7 +217,7 @@ def train_crypto_trading(config_suffix):
 
         for model_type in ['a2c', 'ddpg', 'td3', 'sac']:
             print(f"=============={model_type}===========")
-            if model is None:
+            if LAST_TRADE_DATE == '':
                 model = agent.get_model(model_type)
             else:
                 from stable_baselines3 import A2C, TD3, SAC, DDPG
