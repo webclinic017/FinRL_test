@@ -27,15 +27,18 @@ DATA_SAVE_DIR = f"datasets"
 TRAINED_MODEL_DIR = f"trained_models"
 TENSORBOARD_LOG_DIR = f"tensorboard_log"
 RESULTS_DIR = f"results_3"
-TOTAL_TIMESTAMPS = 40000
+TOTAL_TIMESTAMPS = 80000
 # os.makedirs(TRAINED_MODEL_DIR)
 
 
 ## time_fmt = '%Y-%m-%d'
-START_DATE = "2020-10-01"
-END_DATE = "2021-06-01"
+ENUMERATE_START_DATE = "2020-10-01"
+ENUMERATE_END_DATE = "2021-09-01"
 
-START_TRADE_DATE = "2021-04-01"
+ENUMERATE_START_TRADE_DATE = "2021-02-01"
+ENUMERATE_FUTURE_MONTH = 1
+ENUMERATE_ROLLING_MONTH = 1
+MODEL_TYPE = 'td3'
 
 ## dataset default columns
 DEFAULT_DATA_COLUMNS = ["date", "tic", "close"]
@@ -132,8 +135,7 @@ DOW_30_TICKER = [
     "BTCUP/USDT",
     "LTC/USDT",
     "AAVEUP/USDT",
-    "AAVE/USDT",
-    "XLM/USDT"
+    "AAVEUSDT"
 ]
 
 # Nasdaq 100 constituents at 2019/01
