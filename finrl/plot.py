@@ -75,7 +75,7 @@ def crypto_backtest_plot(
         merge_baseline_test.backtest.plot(color='red', grid=True, label='backtest')
 
         plt.legend(loc=2)
-        plt.ylim(0, 5)
+        plt.ylim(0, 2)
         plt.show()
         plt.savefig(f"./results/results_{config_suffix}/{pngname}__{baseline_ticker.replace('/', '')}.png")
 
