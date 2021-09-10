@@ -172,11 +172,11 @@ def train_crypto_trading(config_suffix):
         pd.date_range(
             start=crypto_config.ENUMERATE_START_TRADE_DATE,
             end=crypto_config.ENUMERATE_END_DATE,
-            freq='M') + pd.DateOffset(days=1)
+            freq=f'{crypto_config.ENUMERATE_ROLLING_DAYS}D')
         ):
         enumerate_date_paras.append([
-        (datetime.datetime.strptime(crypto_config.ENUMERATE_START_DATE, '%Y-%m-%d') + pd.DateOffset(months=idx)).strftime('%Y-%m-%d'),
-        (datetime.datetime.strptime(crypto_config.ENUMERATE_START_TRADE_DATE, '%Y-%m-%d') + pd.DateOffset(months=idx)).strftime('%Y-%m-%d'),
+        (datetime.datetime.strptime(crypto_config.ENUMERATE_START_DATE, '%Y-%m-%d') + pd.DateOffset(days=idx*crypto_config.ENUMERATE_ROLLING_DAYS)).strftime('%Y-%m-%d'),
+        (END_DATE - pd.DateOffset(days=crypto_config.ENUMERATE_ROLLING_DAYS)).strftime('%Y-%m-%d'),
         END_DATE.strftime('%Y-%m-%d')])
 
     # init
