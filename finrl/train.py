@@ -140,7 +140,8 @@ def train_crypto_trading(config_suffix):
         start_date=crypto_config.ENUMERATE_START_DATE,
         end_date=crypto_config.ENUMERATE_END_DATE,
         ticker_list=crypto_config.DOW_30_TICKER,
-    ).fetch_data()
+    ).fetch_data().drop_duplicates()
+
     crypto_config.DOW_30_TICKER = list(df.tic.value_counts().nlargest(1, keep='all').index)
     if len(crypto_config.DOW_30_TICKER) < 3:
         raise 'no tic'
