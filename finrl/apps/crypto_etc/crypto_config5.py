@@ -31,14 +31,14 @@ TOTAL_TIMESTAMPS = 80000
 # os.makedirs(TRAINED_MODEL_DIR)
 
 
-## time_fmt = '%Y-%m-%d'
-ENUMERATE_START_DATE = "2021-07-01"
-ENUMERATE_END_DATE = "2021-09-01"
+## time_fmt = '%Y-%m-%d
+ENUMERATE_START_DATE = "2021-03-01"
+ENUMERATE_END_DATE = "2021-05-01"
 
-ENUMERATE_START_TRADE_DATE = "2021-08-01"
+ENUMERATE_START_TRADE_DATE = "2021-04-01"
 ENUMERATE_FUTURE_MONTH = 1
-ENUMERATE_ROLLING_DAYS = 2
-MODEL_TYPE = 'ddpg'
+ENUMERATE_ROLLING_DAYS = 5
+# MODEL_TYPE = 'ddpg'
 
 ## dataset default columns
 DEFAULT_DATA_COLUMNS = ["date", "tic", "close"]
@@ -114,28 +114,41 @@ SRI_KEHATI_TICKER = [
 # check https://wrds-www.wharton.upenn.edu/ for U.S. index constituents
 # Dow 30 constituents at 2019/01
 DOW_30_TICKER = [
-    "BTC/USDT",
-    "ETH/USDT",
-    "BCH/USDT",
-    "WNX/MUSDT",
-    "DCR/USDT",
-    "ETHUP/USDT",
-    "KSM/USDT",
-    "ZEC/USDT",
-    "YFI/USDT",
-    "DOTUP/USDT",
-    "MKR/USDT",
-    "DASH/USDT",
-    "SUSHIUP/USDT",
-    "EGLD/USDT",
-    "BNB/USDT",
-    "XMR/USDT",
-    "YFII/USDT",
-    "BNBUP/USDT",
-    "BTCUP/USDT",
-    "LTC/USDT",
-    "AAVEUP/USDT",
-    "AAVEUSDT"
+    'BTC/USDT',
+    'BTS/USDT',
+    'BTT/USDT',
+    'BZRX/USDT',
+    'CHR/USDT',
+    'DENT/USDT',
+    'DGB/USDT',
+    'DOGE/USDT',
+    'ETC/USDT',
+    'ETH/BUSD',
+    'FLM/USDT',
+    'FTM/USDT',
+    'GRT/USDT',
+    'HBAR/USDT',
+    'HOT/USDT',
+    'KNC/USDT',
+    'KSM/USDT',
+    'LINK/USDT',
+    'LIT/USDT',
+    'LRC/USDT',
+    'LUNA/USDT',
+    'MANA/USDT',
+    'MATIC/USDT',
+    'MKR/USDT',
+    'MTL/USDT',
+    'NKN/USDT',
+    'OGN/USDT',
+    'OMG/USDT',
+    'ONE/USDT',
+    'QTUM/USDT',
+    'REEF/USDT',
+    'REN/USDT',
+    'RLC/USDT',
+    'RSR/USDT',
+    'ZRX/USDT'
 ]
 
 # Nasdaq 100 constituents at 2019/01
