@@ -216,54 +216,51 @@ def train_crypto_trading(config_suffix):
 
         print("==============Model Training===========")
 
-        for model_type in ['a2c', 'ddpg', 'td3', 'sac']:
-            if model_type != crypto_config.MODEL_TYPE:
-                pass
-            else:
-                print(f"=============={model_type}===========")
-                # if LAST_TRADE_DATE == '':
-                model = agent.get_model(model_type)
-                # else:
-                #     from stable_baselines3 import A2C, TD3, SAC, DDPG
-                #     if model_type == 'a2c':
-                #         model = A2C.load(f'./results/{crypto_config.RESULTS_DIR}/model_a2c_{LAST_TRADE_DATE}')
-                #     elif model_type == 'td3':
-                #         model = TD3.load(f'./results/{crypto_config.RESULTS_DIR}/model_td3_{LAST_TRADE_DATE}')
-                #     elif model_type == 'sac':
-                #         model = SAC.load(f'./results/{crypto_config.RESULTS_DIR}/model_sac_{LAST_TRADE_DATE}')
-                #     elif model_type == 'ddpg':
-                #         model = DDPG.load(f'./results/{crypto_config.RESULTS_DIR}/model_ddpg_{LAST_TRADE_DATE}')
+        for model_type in ['a2c', 'ddpg', 'td3', 'sac', 'ppo']:
+            print(f"=============={model_type}===========")
+            # if LAST_TRADE_DATE == '':
+            model = agent.get_model(model_type)
+            # else:
+            #     from stable_baselines3 import A2C, TD3, SAC, DDPG
+            #     if model_type == 'a2c':
+            #         model = A2C.load(f'./results/{crypto_config.RESULTS_DIR}/model_a2c_{LAST_TRADE_DATE}')
+            #     elif model_type == 'td3':
+            #         model = TD3.load(f'./results/{crypto_config.RESULTS_DIR}/model_td3_{LAST_TRADE_DATE}')
+            #     elif model_type == 'sac':
+            #         model = SAC.load(f'./results/{crypto_config.RESULTS_DIR}/model_sac_{LAST_TRADE_DATE}')
+            #     elif model_type == 'ddpg':
+            #         model = DDPG.load(f'./results/{crypto_config.RESULTS_DIR}/model_ddpg_{LAST_TRADE_DATE}')
 
-                trained = agent.train_model(
-                    model=model, tb_log_name=model_type, total_timesteps=crypto_config.TOTAL_TIMESTAMPS
-                )
+            trained = agent.train_model(
+                model=model, tb_log_name=model_type, total_timesteps=crypto_config.TOTAL_TIMESTAMPS
+            )
 
-                print("==============Start Trading===========")
-                turbulence_threshold = int(np.quantile(train.turbulence, 0.99))
-                e_trade_gym = StockTradingEnv(df=trade, turbulence_threshold=turbulence_threshold, **env_kwargs)
+            print("==============Start Trading===========")
+            turbulence_threshold = int(np.quantile(train.turbulence, 0.99))
+            e_trade_gym = StockTradingEnv(df=trade, turbulence_threshold=turbulence_threshold, **env_kwargs)
 
-                df_account_value, df_actions = DRLAgent.DRL_prediction(
-                    model=trained, environment=e_trade_gym
-                )
+            df_account_value, df_actions = DRLAgent.DRL_prediction(
+                model=trained, environment=e_trade_gym
+            )
 
-                # save result
-                os.makedirs(f'./results/{crypto_config.RESULTS_DIR}', exist_ok=True)
+            # save result
+            os.makedirs(f'./results/{crypto_config.RESULTS_DIR}', exist_ok=True)
 
-                df_account_value.to_csv(
-                    f"./results/{crypto_config.RESULTS_DIR}/df_account_value_{model_type}_{START_TRADE_DATE}.csv"
-                )
-                df_actions.to_csv(f'./results/{crypto_config.RESULTS_DIR}/df_actions_{model_type}_{START_TRADE_DATE}.csv')
-                print("./results/" + crypto_config.RESULTS_DIR + "/df_actions_" + model_type + ".csv")
+            df_account_value.to_csv(
+                f"./results/{crypto_config.RESULTS_DIR}/df_account_value_{model_type}_{START_TRADE_DATE}.csv"
+            )
+            df_actions.to_csv(f'./results/{crypto_config.RESULTS_DIR}/df_actions_{model_type}_{START_TRADE_DATE}.csv')
+            print("./results/" + crypto_config.RESULTS_DIR + "/df_actions_" + model_type + ".csv")
 
-                crypto_backtest_plot(
-                    account_value=df_account_value,
-                    baseline_tickers=["BTC/USDT", "ETH/USDT", "LTC/USDT", "XLM/USDT", "BNB/USDT"],
-                    baseline_start=START_TRADE_DATE,
-                    baseline_end=END_DATE,
-                    pngname=f'{model_type}_returns_{START_TRADE_DATE}',
-                    config_suffix=config_suffix
-                )
-                trained.save(f'./results/{crypto_config.RESULTS_DIR}/model_{model_type}_{START_TRADE_DATE}')
+            crypto_backtest_plot(
+                account_value=df_account_value,
+                baseline_tickers=["BTC/USDT", "ETH/USDT", "LTC/USDT", "XLM/USDT", "BNB/USDT"],
+                baseline_start=START_TRADE_DATE,
+                baseline_end=END_DATE,
+                pngname=f'{model_type}_returns_{START_TRADE_DATE}',
+                config_suffix=config_suffix
+            )
+            trained.save(f'./results/{crypto_config.RESULTS_DIR}/model_{model_type}_{START_TRADE_DATE}')
         # LAST_TRADE_DATE = START_TRADE_DATE
 
 

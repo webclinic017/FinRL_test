@@ -31,14 +31,14 @@ TOTAL_TIMESTAMPS = 80000
 # os.makedirs(TRAINED_MODEL_DIR)
 
 
-## time_fmt = '%Y-%m-%d'
+## time_fmt = '%Y-%m-%d
 ENUMERATE_START_DATE = "2021-06-01"
 ENUMERATE_END_DATE = "2021-08-01"
 
 ENUMERATE_START_TRADE_DATE = "2021-07-01"
 ENUMERATE_FUTURE_MONTH = 1
 ENUMERATE_ROLLING_DAYS = 5
-MODEL_TYPE = 'ddpg'
+# MODEL_TYPE = 'ddpg'
 
 ## dataset default columns
 DEFAULT_DATA_COLUMNS = ["date", "tic", "close"]
