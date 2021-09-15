@@ -216,7 +216,7 @@ def train_crypto_trading(config_suffix):
 
         print("==============Model Training===========")
 
-        for model_type in ['a2c', 'ddpg', 'td3', 'sac', 'ppo']:
+        for model_type in ['ddpg']:
             print(f"=============={model_type}===========")
             # if LAST_TRADE_DATE == '':
             model = agent.get_model(model_type)
