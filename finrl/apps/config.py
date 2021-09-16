@@ -58,7 +58,7 @@ TD3_PARAMS = {"batch_size": 100, "buffer_size": 1000000, "learning_rate": 0.001}
 SAC_PARAMS = {
     "batch_size": 64,
     "buffer_size": 100000,
-    "learning_rate": 0.0001,
+    "learning_rate": 0.001,
     "learning_starts": 100,
     "batch_size": 64,
     "ent_coef": "auto_0.1",
