@@ -5,7 +5,7 @@ import time
 import gym
 
 # from finrl.apps import config
-from finrl.apps.crypto_etc import crypto_config1 as crypto_config
+from finrl.apps.crypto_etc import crypto_config1 as config
 from finrl.neo_finrl.preprocessor.preprocessors import FeatureEngineer, data_split
 
 from finrl.neo_finrl.env_stock_trading.env_stocktrading import StockTradingEnv
