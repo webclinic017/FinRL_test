@@ -4,7 +4,8 @@ import numpy as np
 import time
 import gym
 
-from finrl.apps import config
+# from finrl.apps import config
+from finrl.apps.crypto_etc import crypto_config1 as crypto_config
 from finrl.neo_finrl.preprocessor.preprocessors import FeatureEngineer, data_split
 
 from finrl.neo_finrl.env_stock_trading.env_stocktrading import StockTradingEnv
@@ -172,7 +173,7 @@ class DRLEnsembleAgent:
                 train_period,val_test_period,
                 rebalance_window, validation_window,
                 stock_dim,
-                hmax,                
+                hmax,
                 initial_amount,
                 buy_cost_pct,
                 sell_cost_pct,
@@ -304,8 +305,8 @@ class DRLEnsembleAgent:
                 # if the mean of the historical data is less than the 90% quantile of insample turbulence data
                 # then we tune up the turbulence_threshold, meaning we lower the risk
                 turbulence_threshold = np.quantile(insample_turbulence.turbulence.values, 1)
-                
-            turbulence_threshold = np.quantile(insample_turbulence.turbulence.values, 0.99) 
+
+            turbulence_threshold = np.quantile(insample_turbulence.turbulence.values, 0.99)
             print("turbulence_threshold: ", turbulence_threshold)
 
             ############## Environment Setup starts ##############
